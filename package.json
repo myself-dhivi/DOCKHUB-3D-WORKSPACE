@@ -2,6 +2,10 @@
   "name": "dockhub-3d-workspace",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,7 +21,6 @@
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.1",
-    "@hookform/resolvers": "^5.9.1",
     "@mui/material": "^9.4.0",
     "@mui/material-nextjs": "^9.4.0",
     "@prisma/client": "^6.19.3",
@@ -27,7 +30,6 @@
     "ogl": "^1.0.11",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "react-hook-form": "^7.87.0",
     "zod": "^4.5.4"
   },
   "devDependencies": {
