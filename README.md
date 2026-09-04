@@ -8,12 +8,12 @@ DOCKHUB-3D-WORKSPACE is a production-oriented foundation for a premium, room-by-
 
 Included now:
 
-- Public landing page with database-backed summary metrics and featured spaces
+- Public landing page with summary metrics and featured spaces, served from static data
 - Guided `/showcase` experience with previous/next controls and thumbnails
 - Space catalogue and detail pages
 - Pricing and pass-plan pages
 - Read-only admin dashboard, rooms, pricing, and passes views
-- PostgreSQL schema, repeatable Prisma seed, and initial migration
+- Confirmed room, pricing, and pass data in `src/data/mock-workspace.ts` (no database required)
 - Six temporary room-background assets designed for easy replacement
 
 Explicitly deferred: booking workflows, payments, authentication/authorization, admin CRUD, live inventory updates, and final room photography.
@@ -22,7 +22,7 @@ Explicitly deferred: booking workflows, payments, authentication/authorization, 
 
 - Next.js 16 App Router, React 19, and TypeScript
 - Material UI and Emotion
-- Prisma ORM 6 with PostgreSQL
+- Static data module (`src/data/mock-workspace.ts`) in place of a database
 - Zod
 - React Hook Form and Hook Form resolvers (installed for later form work)
 - Lucide React icons
@@ -35,7 +35,6 @@ Prerequisites:
 
 - Node.js 20.9 or newer
 - npm
-- PostgreSQL 14 or newer
 
 Install dependencies:
 
@@ -43,30 +42,15 @@ Install dependencies:
 npm install
 ```
 
-Create a PostgreSQL database:
-
-```sql
-CREATE DATABASE dockhub_3d_workspace;
-```
-
-Copy the environment template and update credentials for your local PostgreSQL instance:
+Copy the environment template:
 
 ```bash
 cp .env.example .env
 ```
 
-The expected variable is:
-
-```dotenv
-DATABASE_URL="postgresql://postgres:password@localhost:5432/dockhub_3d_workspace?schema=public"
-```
-
-Generate the client, apply the migration, seed confirmed data, and start development:
+Start development — no database or connection string needed:
 
 ```bash
-npx prisma generate
-npx prisma migrate dev --name initial_setup
-npm run db:seed
 npm run dev
 ```
 
@@ -78,12 +62,7 @@ Open [http://localhost:3000](http://localhost:3000).
 npm run dev
 npm run build
 npm run lint
-npm run db:generate
-npm run db:migrate
-npm run db:seed
-npm run db:studio
 npx tsc --noEmit
-npx prisma validate
 ```
 
 ## Routes
@@ -105,12 +84,12 @@ npx prisma validate
 ## Architecture
 
 - `src/app` contains thin server-rendered route components.
-- `src/services` is the only application layer that queries Prisma.
+- `src/services` is the only application layer that reads workspace data; every function reads from `src/data/mock-workspace.ts` and returns the same view models it always has.
 - `src/types` contains serializable view models passed to UI components.
 - `src/components/showcase/ShowcaseShell.tsx` owns the small amount of client state needed for no-reload room navigation.
-- Prisma prices are converted from `Decimal` values to numbers at the service boundary; dates are converted to ISO strings.
-- Business pricing remains in `RoomPricing`, never in `Room` or React components.
-- Database-backed pages are request-rendered, so production builds do not require a reachable database. Runtime pages do require a migrated and seeded PostgreSQL instance.
+- Prices and dates in `mock-workspace.ts` are already plain numbers and ISO strings, matching what the service boundary used to convert from Prisma `Decimal`/`DateTime` values.
+- Business pricing remains attached to each room's `pricing` records, never hardcoded elsewhere in `Room` view or React components.
+- Every route is static data under the hood, so builds and runtime never require a reachable database or `DATABASE_URL`.
 
 ## Room images
 
