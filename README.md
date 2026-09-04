@@ -106,9 +106,9 @@ workspace-phase-2-placeholder.jpg
 
 Each room stores both `backgroundImageUrl` and `thumbnailImageUrl`. Replace an asset at the same path to keep existing seed mappings, or update the room record to use a new file. Recommended production images are landscape 16:9, at least 1920×1080, compressed JPEG or AVIF, with no baked-in text. Keep the right side reasonably calm for the desktop information panel.
 
-## Seed data and known ambiguities
+## Static data and known ambiguities
 
-The seed is idempotent and creates six room records. Only two contain commercial pricing:
+`src/data/mock-workspace.ts` defines six room records. Only two contain commercial pricing:
 
 - Dockhub Workspace - Phase 1: 150 capacity, INR 9,800 regular, INR 7,999 pre-booking.
 - Dockhub Workspace - Phase 2: 350 capacity, INR 8,000 regular, INR 6,499 pre-booking, available 01 January 2027.
